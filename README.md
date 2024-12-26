@@ -13,8 +13,18 @@ Welcome to the **Financial Option Pricing and Risk Management** project reposito
   - [Cox-Ingersoll-Ross (CIR) Model](#coxingersoll-ross-cir-model)
   - [Delta Hedging](#delta-hedging)
 - [Code Structure](#code-structure)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Data Retrieval and Visualization](#data-retrieval-and-visualization)
+  - [Stock Price Simulation](#stock-price-simulation)
+  - [Option Pricing](#option-pricing)
+  - [Interest Rate Simulation](#interest-rate-simulation)
+  - [Option Pricing with Stochastic Interest Rates](#option-pricing-with-stochastic-interest-rates)
+  - [Delta Hedging Simulation](#delta-hedging-simulation)
+- [Results](#results)
+- [References](#references)
+- [License](#license)
 
-  
 ## Introduction
 
 Options are fundamental financial derivatives that provide the right, but not the obligation, to buy or sell an asset at a predetermined price within a specified timeframe. Accurately pricing these options is crucial for traders, risk managers, and financial analysts. This project implements key financial models and simulation techniques to price European call and put options, simulate stock and interest rate paths, and evaluate hedging strategies.
@@ -27,34 +37,34 @@ The **Black-Scholes model** is a mathematical framework for pricing European-sty
 
 **Key Components:**
 
-- **Spot Price (S):** Current price of the underlying asset.
-- **Strike Price (K):** Predefined price at which the option can be exercised.
-- **Time to Maturity (T):** Time remaining until the option expires.
-- **Risk-Free Rate (r):** Theoretical rate of return of an investment with zero risk.
-- **Volatility (σ):** Measure of the asset's price fluctuations.
+- **Spot Price ($'S'$):** Current price of the underlying asset.
+- **Strike Price ($'K'$):** Predefined price at which the option can be exercised.
+- **Time to Maturity ($'T'$):** Time remaining until the option expires.
+- **Risk-Free Rate ($'r'$):** Theoretical rate of return of an investment with zero risk.
+- **Volatility ($'\sigma'$):** Measure of the asset's price fluctuations.
 
 **Formulas:**
 
 For a **Call Option**:
-$$
+$$'
 C = S \cdot N(d_1) - K e^{-rT} \cdot N(d_2)
-$$
+$$'
 
 For a **Put Option**:
-$$
+$$'
 P = K e^{-rT} \cdot N(-d_2) - S \cdot N(-d_1)
-$$
+$$'
 
 Where:
-$$
+$$'
 d_1 = \frac{\ln{\left(\frac{S}{K}\right)} + \left(r + \frac{\sigma^2}{2}\right)T}{\sigma \sqrt{T}}
-$$
-$$
+'$$
+$$'
 d_2 = d_1 - \sigma \sqrt{T}
-$$
-$$
+'$$
+$$'
 N(\cdot)
-$$ 
+'$$ 
 is the cumulative distribution function of the standard normal distribution.
 
 ### Monte Carlo Simulation
@@ -73,23 +83,21 @@ The **Cox-Ingersoll-Ross (CIR) model** is used to model the evolution of interes
 
 **Key Components:**
 
-- **Initial Rate ($r_0$):** Starting interest rate.
-- **Mean Reversion Rate ($\kappa$):** Speed at which rates revert to the mean.
-- **Long-Term Mean ($\theta$):** The average rate to which interest rates revert.
-- **Volatility ($\sigma$):** Variability in interest rate movements.
+- **Initial Rate ($'r_0'$):** Starting interest rate.
+- **Mean Reversion Rate ($'\kappa'$):** Speed at which rates revert to the mean.
+- **Long-Term Mean ($'\theta'$):** The average rate to which interest rates revert.
+- **Volatility ($'\sigma'$):** Variability in interest rate movements.
 
 **Stochastic Differential Equation:**
-$$
+$$'
 dr_t = \kappa (\theta - r_t) dt + \sigma \sqrt{r_t} dW_t
-$$
+'$$
 
 Where:
-- $dr_t$ is the change in interest rate.
-- $dW_t$ is a Wiener process (standard Brownian motion).
+- $'dr_t'$ is the change in interest rate.
+- $'dW_t'$ is a Wiener process (standard Brownian motion).
 
 ### Delta Hedging
-
-
 
 **Delta hedging** is a risk management strategy that aims to reduce the sensitivity of an option's price to small changes in the price of the underlying asset. By dynamically adjusting the position in the underlying asset, traders can neutralize the option's delta (rate of change of the option price with respect to the underlying asset price).
 
