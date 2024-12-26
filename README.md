@@ -12,18 +12,7 @@ Welcome to the **Financial Option Pricing and Risk Management** project reposito
   - [Monte Carlo Simulation](#monte-carlo-simulation)
   - [Cox-Ingersoll-Ross (CIR) Model](#coxingersoll-ross-cir-model)
   - [Delta Hedging](#delta-hedging)
-- [Code Structure](#code-structure)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Data Retrieval and Visualization](#data-retrieval-and-visualization)
-  - [Stock Price Simulation](#stock-price-simulation)
-  - [Option Pricing](#option-pricing)
-  - [Interest Rate Simulation](#interest-rate-simulation)
-  - [Option Pricing with Stochastic Interest Rates](#option-pricing-with-stochastic-interest-rates)
-  - [Delta Hedging Simulation](#delta-hedging-simulation)
-- [Results](#results)
-- [References](#references)
-- [License](#license)
+  - [Code Structure](#code-structure)
 
 ## Introduction
 
