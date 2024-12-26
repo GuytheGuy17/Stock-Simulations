@@ -2,7 +2,7 @@
 
 # Financial Option Pricing and Risk Management
 
-Welcome to the **Financial Option Pricing and Risk Management** project repository. This project provides a comprehensive toolkit for pricing European options, simulating stock and interest rate paths, and implementing risk management strategies such as delta hedging. Leveraging established financial models and numerical methods, the code offers both analytical and simulation-based approaches to option valuation.
+Welcome to the **Financial Option Pricing and Risk Management** project repository. This project provides an example of a delta hedging strategy on an example stock, here Apple stock is chosen, to demonstrate the effectiveness of this strategy in removing short-term volatility fluctuations to allow for focus on longer-term growth as a method of acheiveing returns.
 
 ## Table of Contents
 
