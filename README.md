@@ -13,18 +13,8 @@ Welcome to the **Financial Option Pricing and Risk Management** project reposito
   - [Cox-Ingersoll-Ross (CIR) Model](#coxingersoll-ross-cir-model)
   - [Delta Hedging](#delta-hedging)
 - [Code Structure](#code-structure)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Data Retrieval and Visualization](#data-retrieval-and-visualization)
-  - [Stock Price Simulation](#stock-price-simulation)
-  - [Option Pricing](#option-pricing)
-  - [Interest Rate Simulation](#interest-rate-simulation)
-  - [Option Pricing with Stochastic Interest Rates](#option-pricing-with-stochastic-interest-rates)
-  - [Delta Hedging Simulation](#delta-hedging-simulation)
-- [Results](#results)
-- [References](#references)
-- [License](#license)
 
+  
 ## Introduction
 
 Options are fundamental financial derivatives that provide the right, but not the obligation, to buy or sell an asset at a predetermined price within a specified timeframe. Accurately pricing these options is crucial for traders, risk managers, and financial analysts. This project implements key financial models and simulation techniques to price European call and put options, simulate stock and interest rate paths, and evaluate hedging strategies.
@@ -114,13 +104,4 @@ The project is organized into the following components:
 - **Visualization:**
   - Plots historical and simulated stock prices.
   - Visualizes interest rate paths and hedging performance.
-
-## Installation
-
-To get started with this project, ensure you have Python 3.7 or later installed. Follow the steps below to set up the environment:
-
-1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/yourusername/financial-option-pricing.git
-   cd financial-option-pricing
 
