@@ -229,6 +229,8 @@ mc_put_price = BlackScholes.monte_carlo_simulation(
 print(f"Monte Carlo Call Option Price: ${mc_call_price:.2f}")
 print(f"Monte Carlo Put Option Price: ${mc_put_price:.2f}")
 
+
+
 #%%
 
 # CIR Model Parameters
@@ -246,6 +248,11 @@ cir_model = CoxIngersollRossModel(r0, kappa, theta, sigma_r, T_cir, n_cir, paths
 # Simulate interest rate paths
 interest_rate_paths = cir_model.simulate()
 
+# Validate the simulated rates
+print(f"Mean of simulated interest rates: {interest_rate_paths.mean():.4f}")
+print(f"Minimum simulated interest rate: {interest_rate_paths.min():.4f}")
+print(f"Maximum simulated interest rate: {interest_rate_paths.max():.4f}")
+
 # Plot a subset of the simulated interest rate paths
 plt.figure(figsize=(12, 6))
 for i in range(10):
@@ -256,30 +263,33 @@ plt.ylabel('Interest Rate')
 plt.grid(True)
 plt.show()
 
-#%%
-
-# Generate CIR Simulated Rates
+# %%
+# Generate CIR Simulated Rates for Option Pricing
 cir_model = CoxIngersollRossModel(r0=r0, kappa=kappa, theta=theta, sigma=sigma_r, T=T_option, n=n_mc, paths=paths_mc)
 interest_rate_paths = cir_model.simulate()
 
+# Validate the simulated rates
+print(f"Mean of simulated interest rates for option pricing: {interest_rate_paths.mean():.4f}")
+print(f"Minimum simulated interest rate for option pricing: {interest_rate_paths.min():.4f}")
+print(f"Maximum simulated interest rate for option pricing: {interest_rate_paths.max():.4f}")
+
 # Monte Carlo Simulation for Option Pricing with CIR Rates
-def monte_carlo_option_with_cir(S0, K, T, sigma, stock_paths, rate_paths, option_type="call"):
+def monte_carlo_option_with_cir_corrected(S0, K, T, sigma, stock_paths, rate_paths, dt, option_type="call"):
     """
-    Monte Carlo simulation for option pricing using CIR interest rates.
+    Monte Carlo simulation for option pricing using CIR interest rates with correct discounting.
     :param S0: Initial stock price
     :param K: Strike price
     :param T: Time to maturity
     :param sigma: Volatility
     :param stock_paths: Simulated stock price paths
     :param rate_paths: Simulated interest rate paths (CIR model)
+    :param dt: Time step size
     :param option_type: 'call' or 'put'
     :return: Simulated option price
     """
-    # Ensure the same number of paths and time steps
-    assert stock_paths.shape == rate_paths.shape, "Stock and rate paths must have the same shape"
-
-    # Calculate average interest rate per path over the time period
-    avg_rates = np.mean(rate_paths, axis=1)
+    # Calculate the cumulative discount factor for each path
+    cumulative_rates = np.sum(rate_paths * dt, axis=1)  # Integral of r(t) dt
+    discount_factors = np.exp(-cumulative_rates)
     
     # Final stock prices
     final_prices = stock_paths[:, -1]
@@ -292,54 +302,58 @@ def monte_carlo_option_with_cir(S0, K, T, sigma, stock_paths, rate_paths, option
     else:
         raise ValueError("Invalid option type. Use 'call' or 'put'.")
     
-    # Discount payoffs using the average CIR interest rate
-    discounted_payoff = payoff * np.exp(-avg_rates * T)
+    # Discount payoffs using the cumulative discount factor
+    discounted_payoff = payoff * discount_factors
     
     # Return the average discounted payoff
     return np.mean(discounted_payoff)
 
-# Simulate Stock Price Paths
+# Simulate Stock Price Paths with Risk-Neutral Drift
 np.random.seed(42)
 stock_paths = np.zeros((paths_mc, n_mc))
 stock_paths[:, 0] = S0
 
-dt = T_option / n_mc
-Z = np.random.standard_normal((paths_mc, n_mc))
 for t in range(1, n_mc):
-    stock_paths[:, t] = stock_paths[:, t-1] * np.exp((mu / trading_days - 0.5 * sigma_daily**2) * dt +
-                                                     sigma_daily * np.sqrt(dt) * Z[:, t-1])
+    # Correct Drift Term
+    drift = (interest_rate_paths[:, t-1] - 0.5 * sigma**2) * dt
+    # Correct Diffusion Term
+    diffusion = sigma * np.sqrt(dt) * Z[:, t-1]
+    # Update Stock Prices
+    stock_paths[:, t] = stock_paths[:, t-1] * np.exp(drift + diffusion)
 
-# Calculate Option Prices
-cir_mc_call_price = monte_carlo_option_with_cir(
+# Plot a subset of the simulated stock price paths
+plt.figure(figsize=(12, 6))
+for i in range(100):
+    plt.plot(stock_paths[i], lw=1)
+plt.title(f'Simulated {ticker} Stock Price Paths over {T} Year(s) with CIR Rates')
+plt.xlabel('Time Steps (Days)')
+plt.ylabel('Stock Price ($)')
+plt.grid(True)
+plt.show()
+
+# Calculate Option Prices with Correct Discounting
+cir_mc_call_price = monte_carlo_option_with_cir_corrected(
     S0=S0,
     K=K,
     T=T_option,
     sigma=sigma_option,
     stock_paths=stock_paths,
     rate_paths=interest_rate_paths,
+    dt=dt,
     option_type="call"
 )
 
-cir_mc_put_price = monte_carlo_option_with_cir(
+cir_mc_put_price = monte_carlo_option_with_cir_corrected(
     S0=S0,
     K=K,
     T=T_option,
     sigma=sigma_option,
     stock_paths=stock_paths,
     rate_paths=interest_rate_paths,
+    dt=dt,
     option_type="put"
 )
 
 # Display Results
 print(f"Monte Carlo Call Option Price with CIR Rates: ${cir_mc_call_price:.2f}")
 print(f"Monte Carlo Put Option Price with CIR Rates: ${cir_mc_put_price:.2f}")
-
-#%%
-plt.figure(figsize=(12, 6))
-plt.plot(stock_paths[:10].T, alpha=0.7, label='Stock Paths')
-plt.plot(interest_rate_paths[:10].T, alpha=0.7, label='CIR Rate Paths')
-plt.title("Simulated Stock and Interest Rate Paths")
-plt.xlabel("Time Steps")
-plt.legend(['Stock Price', 'Interest Rate'])
-plt.grid(True)
-plt.show()
