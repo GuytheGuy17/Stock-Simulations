@@ -428,28 +428,24 @@ portfolio_values, cash_positions, hedging_errors, deltas, simulated_prices = del
     S0=S0, K=K, T=T_option, r=r, sigma=sigma_option, paths=paths, n=n, option_type="call"
 )
 
-
 #%%
-# Plot the average portfolio value over time
+
+# Calculate statistics
 average_portfolio_value = np.mean(portfolio_values, axis=0)
-plt.figure(figsize=(12, 6))
-plt.plot(average_portfolio_value, label="Average Portfolio Value")
-plt.title("Delta Hedging Simulation")
-plt.xlabel("Time Steps")
-plt.ylabel("Portfolio Value")
-plt.grid(True)
-plt.legend()
-plt.show()
+std_portfolio_value = np.std(portfolio_values, axis=0)
+conf_interval_upper = average_portfolio_value + 1.96 * std_portfolio_value / np.sqrt(portfolio_values.shape[0])
+conf_interval_lower = average_portfolio_value - 1.96 * std_portfolio_value / np.sqrt(portfolio_values.shape[0])
 
-# Analyze hedging errors
-plt.figure(figsize=(12, 6))
-plt.hist(hedging_errors, bins=50, alpha=0.7)
-plt.title("Hedging Errors Distribution")
-plt.xlabel("Hedging Error")
-plt.ylabel("Frequency")
-plt.grid(True)
-plt.show()
+# Define time steps (assuming daily steps)
+time_steps = np.arange(1, len(average_portfolio_value) + 1)
 
-# Print summary statistics
-print(f"Mean Hedging Error: {np.mean(hedging_errors):.4f}")
-print(f"Standard Deviation of Hedging Error: {np.std(hedging_errors):.4f}")
+plt.figure(figsize=(14, 7))
+plt.plot(time_steps, average_portfolio_value, label="Average Portfolio Value", color='blue')
+plt.fill_between(time_steps, conf_interval_lower, conf_interval_upper, color='blue', alpha=0.2, label='95% Confidence Interval')
+plt.title("Delta Hedging Simulation: Average Portfolio Value Over Time", fontsize=16)
+plt.xlabel("Time Steps (Days)", fontsize=14)
+plt.ylabel("Portfolio Value ($)", fontsize=14)
+plt.legend(fontsize=12)
+plt.grid(True, which='both', linestyle='--', linewidth=0.5)
+plt.tight_layout()
+plt.show()
