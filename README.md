@@ -46,9 +46,9 @@ $$'
 $$'
 d_2 = d_1 - \sigma \sqrt{T}
 $$'
-- \(' S '\) = Current stock price
-- \(' K '\) = Strike price
-- \(' T '\) = Time to maturity (in years)
+- $$' S '$$ = Current stock price
+- $$' K '$$ = Strike price
+- $$' T '$$ = Time to maturity (in years)
 - $$' r $$' = Risk-free interest rate
 - $$' \sigma $$' = Volatility of the underlying asset
 - $$' N(\cdot) $$' = Cumulative distribution function of the standard normal distribution
