@@ -30,24 +30,24 @@ The **Black-Scholes model** is a pioneering mathematical framework for option pr
 **Basic Formula:**
 
 For a **Call Option**:
-$$
+$$'
 C = S \cdot N(d_1) - K e^{-rT} \cdot N(d_2)
-$$
+$$'
 
 For a **Put Option**:
-$$
+$$'
 P = K e^{-rT} \cdot N(-d_2) - S \cdot N(-d_1)
-$$
+$$'
 
 Where:
-$$
+$$'
 d_1 = \frac{\ln{\left(\frac{S}{K}\right)} + \left(r + \frac{\sigma^2}{2}\right)T}{\sigma \sqrt{T}}
-$$
-$$
+$$'
+$$'
 d_2 = d_1 - \sigma \sqrt{T}
-$$
-- \( S \) = Current stock price
-- \( K \) = Strike price
+$$'
+- \(' S '\) = Current stock price
+- \(' K '\) = Strike price
 - \( T \) = Time to maturity (in years)
 - \( r \) = Risk-free interest rate
 - \( \sigma \) = Volatility of the underlying asset
