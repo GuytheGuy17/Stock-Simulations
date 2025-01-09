@@ -306,8 +306,11 @@ def monte_carlo_option_with_cir_corrected(S0, K, T, sigma, stock_paths, rate_pat
     # Return the average discounted payoff
     return np.mean(discounted_payoff)
 
-# Simulate Stock Price Paths with Risk-Neutral Drift
 np.random.seed(42)
+
+# Make sure Z_cir uses the same (paths_mc, n_mc) shape
+Z_cir = np.random.standard_normal(size=(paths_mc, n_mc))
+
 stock_paths = np.zeros((paths_mc, n_mc))
 stock_paths[:, 0] = S0
 
@@ -315,9 +318,10 @@ for t in range(1, n_mc):
     # Correct Drift Term
     drift = (interest_rate_paths[:, t-1] - 0.5 * sigma**2) * dt
     # Correct Diffusion Term
-    diffusion = sigma * np.sqrt(dt) * Z[:, t-1]
+    diffusion = sigma * np.sqrt(dt) * Z_cir[:, t-1]
     # Update Stock Prices
     stock_paths[:, t] = stock_paths[:, t-1] * np.exp(drift + diffusion)
+
 
 # Plot a subset of the simulated stock price paths
 plt.figure(figsize=(12, 6))
